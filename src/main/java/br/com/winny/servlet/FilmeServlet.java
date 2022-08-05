@@ -27,6 +27,8 @@ public class FilmeServlet extends HttpServlet {
 		filmes.add(matrix);
 		filmes.add(forestGump);
 
+		String genero = request.getParameter("genero");
+
 		response.setContentType("text/HTML"); // Define o tipo de resposta que a lista retorna
 		PrintWriter out = response.getWriter();
 
@@ -34,7 +36,7 @@ public class FilmeServlet extends HttpServlet {
 
 		out.println("<ul>");
 
-		filmes.forEach(filme -> {
+		filmes.stream().filter(filme -> filme.getGenero().toLowerCase().equals(genero.toLowerCase())).forEach(filme -> {
 			out.println(String.format("<li>Nome: %s", filme.getNome()));
 			out.println(String.format("<br>Gênero: %s", filme.getGenero()));
 			out.println(String.format("<br>Ano: %s </li>", filme.getAno()));
