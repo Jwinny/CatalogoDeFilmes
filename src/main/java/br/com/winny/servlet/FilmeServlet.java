@@ -3,7 +3,10 @@ package br.com.winny.servlet;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -29,20 +32,16 @@ public class FilmeServlet extends HttpServlet {
 
 		String genero = request.getParameter("genero");
 
-		response.setContentType("text/HTML"); // Define o tipo de resposta que a lista retorna
-		PrintWriter out = response.getWriter();
+		ArrayList<Filme> listaFiltrada = filmes.stream()
+				.filter(filme -> filme.getGenero().toLowerCase().equals(genero.toLowerCase()))
+				.collect(Collectors.toCollection(ArrayList::new));
+		
+		request.setAttribute("listaFiltrada", listaFiltrada); // objeto adicionado a requisição
+		
+		RequestDispatcher dispatcher = request.getRequestDispatcher("/lista-filmes.jsp"); //redirecionamento para a pagina JSP
+		dispatcher.forward(request, response); //passando os parametros que serão usados no redirecionamento
+		
+		
 
-		out.println("<h2>Lista de Filmes</h2>");
-
-		out.println("<ul>");
-
-		filmes.stream().filter(filme -> filme.getGenero().toLowerCase().equals(genero.toLowerCase())).forEach(filme -> {
-			out.println(String.format("<li>Nome: %s", filme.getNome()));
-			out.println(String.format("<br>Gênero: %s", filme.getGenero()));
-			out.println(String.format("<br>Ano: %s </li>", filme.getAno()));
-		});
-
-		out.println("</ul>");
-		out.close();
 	}
 }
