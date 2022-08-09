@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 
 
 import br.com.winny.modelo.Filme;
+import br.com.winny.util.JPAUtil;
 
 @WebServlet("/persistir-filme")
 public class PersisteFilmeServlet extends HttpServlet {
@@ -25,14 +26,12 @@ public class PersisteFilmeServlet extends HttpServlet {
 		
 		Filme filme = new Filme(nome, genero, ano);
 		
-		EntityManagerFactory emf = Persistence.createEntityManagerFactory("catalogodefilmes");
-		EntityManager em = emf.createEntityManager();
+		EntityManager em = JPAUtil.getEntityManager();
 		
 		em.getTransaction().begin();
 		em.persist(filme);
 		em.getTransaction().commit();
 		
 		em.close();
-		emf.close();
 	}
 }

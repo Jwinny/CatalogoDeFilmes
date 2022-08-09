@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
+import javax.persistence.EntityManager;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -14,27 +15,20 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import br.com.winny.modelo.Filme;
+import br.com.winny.util.JPAUtil;
 
 @WebServlet("/filme")
 public class FilmeServlet extends HttpServlet {
 	@Override
 	protected void service(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		Filme coringa = new Filme("Coringa", "Drama", 2019);
-		Filme matrix = new Filme("Matrix", "Ação", 1999);
-		Filme forestGump = new Filme("Forest Gump", "Drama", 1994);
-
-		ArrayList<Filme> filmes = new ArrayList<Filme>();
-
-		filmes.add(coringa);
-		filmes.add(matrix);
-		filmes.add(forestGump);
-
-		String genero = request.getParameter("genero");
-
-		ArrayList<Filme> listaFiltrada = filmes.stream()
-				.filter(filme -> filme.getGenero().toLowerCase().equals(genero.toLowerCase()))
-				.collect(Collectors.toCollection(ArrayList::new));
+		EntityManager em = JPAUtil.getEntityManager();
+		em.getTransaction().begin();
+		
+		Filme filme = em.find(Filme.class, 1);
+		
+		ArrayList<Filme> listaFiltrada = new ArrayList<Filme>();
+		listaFiltrada.add(filme);
 		
 		request.setAttribute("listaFiltrada", listaFiltrada); // objeto adicionado a requisição
 		
