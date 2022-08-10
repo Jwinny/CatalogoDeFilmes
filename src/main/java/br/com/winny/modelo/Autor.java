@@ -16,7 +16,16 @@ public class Autor {
 	private String nome;
 	@Column(name = "data_nascimento")
 	private LocalDate dataDeNascimento;
-
+	
+	public Autor() {
+	}
+	
+	public Autor(String nomeDoAutor, LocalDate dataDeNascimento) {
+		this.nome = nomeDoAutor;
+		this.dataDeNascimento = dataDeNascimento;
+	}
+	
+	
 	public Integer getId() {
 		return id;
 	}
