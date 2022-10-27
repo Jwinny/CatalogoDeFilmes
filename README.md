@@ -1,2 +1,2 @@
 # CatalogoDeFilmes
-Projeto do Curso de Java Web FullStack do Lead Dell
+Parte Back-End do projeto do curso de Java Web FullStack do Lead Dell.
